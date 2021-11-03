@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'clients/css/edit.css' %}">
+    <script src="{% static '/js/ckeditor/ckeditor.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <center>
+        {% if create_mode %}
+            <h2>Создание карточки клиента</h2>
+        {% else %}
+            <h2>Редактирование клиента</h2>
+        {% endif %}
+
+    </center>
+
+    <form method="post">{% csrf_token %}
+        {% for field in form.hidden_fields %}
+            {{ field }}
+        {% endfor %}
+
+        {% for field in form.visible_fields %}
+            {{ field.label }} {{ field }}
+        {% endfor %}
+
+        <label>Email адрес(ы)</label>
+        <div id="emails">
+            <div class="vals">
+
+            </div>
+            <button type="button" class="btn btn-primary add-btn">Добавить Email</button>
+        </div>
+
+        <br>
+
+        <label>Номер(а) телефона</label>
+        <div id="phones">
+            <div class="vals">
+
+            </div>
+            <button class="btn btn-primary add-btn" type="button">Добавить номер телефона</button>
+        </div>
+
+        <br>
+        {% if create_mode %}
+           <a href="{% url 'home' %}"  class="btn btn-success">Назад</a>
+        {% else %}
+            <a href="{% url 'clients:detail' object.pk %}"  class="btn btn-success">Назад</a>
+        {% endif %}
+       <button type="button" style="float: right" id="submit-btn" class="btn btn-success">Сохранить</button>
+    </form>
+
+{% load static %}
+<script src="{% static '/clients/js/formLabels.js' %}"></script>
+<script>
+    CKEDITOR.replace('id_comp_description');
+    CKEDITOR.instances.id_comp_description.setData($('#id_comp_description').val())
+</script>
+
+{% endblock %}

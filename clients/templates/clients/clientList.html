@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'clients/css/list.css' %}">
+{% endblock %}
+
+{% block content %}
+    <p>Выберите для просмотра карточку<a style="float: right" class="btn btn-success btn-sm" href="{% url 'clients:create' %}">Создать</a></p>
+    {% if object_list %}
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+            {% if request.GET.order == "comp_name" %}
+                <th scope="col"><a href="?order=-comp_name">Компания</a> {% if 'comp_name' in request.GET.order %}▲{% endif %}</th>
+            {% else %}
+                <th scope="col"><a href="?order=comp_name">Компания</a> {% if 'comp_name' in request.GET.order %}▼{% endif %}</th>
+            {% endif %}
+
+            {% if request.GET.order == "createDate" %}
+                <th scope="col"><a href="?order=-createDate">Дата создания</a> {% if 'createDate' in request.GET.order %}▲{% endif %}</th>
+            {% else %}
+                <th scope="col"><a href="?order=createDate">Дата создания</a> {% if 'createDate' in request.GET.order %}▼{% endif %}</th>
+            {% endif %}
+
+              <th scope="col">&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for object in object_list %}
+                    <tr>
+                      <td>{{ object.comp_name }}</td>
+                      <td>{{ object.createDate|date:"d/m/Y" }} {{ object.createDate|time:"H:i" }}</td>
+                      <td><a class="btn btn-primary" href={{ object.get_absolute_url }}>Подробнее</a></td>
+                    </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        {% if page_obj.paginator.num_pages > 1 %}
+            <nav aria-label="...">
+              <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+                    </li>
+                {% else %}
+                     <li class="page-item disabled">
+                      <a class="page-link" href="" tabindex="-1">Previous</a>
+                    </li>
+                {% endif %}
+
+                {% for i in page_obj.paginator.page_range %}
+                    {% if i < page_obj.number|add:'5' and i > page_obj.number|add:'-5' %}
+                        <li class="page-item {% if i == page_obj.number %}active{% endif %}"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                  {% if page_obj.has_next %}
+                      <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                      </li>
+                  {% else %}
+                      <li class="page-item disabled">
+                        <a class="page-link" href="">Next</a>
+                      </li>
+                  {% endif %}
+
+              </ul>
+            </nav>
+        {% endif %}
+
+    {% else %}
+        <center>
+            <h3>Here no clients yet</h3>
+        </center>
+    {% endif %}
+{% endblock %}
