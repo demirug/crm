@@ -1,43 +1,57 @@
 {% extends 'base.html' %}
 {% block title %}Клиент {{ object.comp_name }}{% endblock %}
+{% block head %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'clients/css/detail.css' %}">
+    {% block subhead %}{% endblock %}
+{% endblock %}
 {% block content %}
+        <a class="btn btn-info btn-small" style="margin-left: 1em" href="{% url 'home' %}">К списку клиентов</a>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="client-form">
+                    <br>
+                    <center><h4>{{ object.comp_name }}</h4></center>
+                    <hr>
+                    <p>Описание клиента:</p>
+                        <div style="margin-left: 20px">
+                            {{ object.comp_description|safe }}
+                        </div>
 
-        <div style="height: 100vh" class="row">
-            <div style="background-color: lightgray" class="col-sm">
-                <br>
-                <center><h4>{{ object.comp_name }}</h4></center>
-                <hr>
-                <p>Описание клиента:</p>
-                    <div style="margin-left: 20px">
-                        {{ object.comp_description|safe }}
-                    </div>
+                    <p>Директор: {{ object.supervisor }}</p>
+                    <p>Адресс: {{ object.address }}</p>
+                    <p>Email адрес(а): </p>
+                    <ul>
+                    {% for email in object.emails.split %}
+                        <li>{{ email }}</li>
+                    {% endfor %}
+                    </ul>
 
-                <p>Директор: {{ object.supervisor }}</p>
-                <p>Адресс: {{ object.address }}</p>
-                <p>Email адрес(а): </p>
-                <ul>
-                {% for email in object.emails.split %}
-                    <li>{{ email }}</li>
-                {% endfor %}
-                </ul>
-
-                <p>Номер(а) телефона: </p>
-                <ul>
-                {% for number in object.phones.split %}
-                    <li>{{ number }}</li>
-                {% endfor %}
-                </ul>
-                <div style="margin-top: 30vh"></div>
-                <p>Дата создания: {{ object.createDate|date:"d/m/Y" }} {{ object.createDate|time:"H:i" }}</p>
-                {% if object.editDate != object.createDate %}
-                    <p>Последнее редактирование: {{ object.editDate|date:"d/m/Y" }} {{ object.editDate|time:"H:i" }}</p>
-                {% endif %}
-                <br>
-                <a class="btn btn-success" href="{% url 'home' %}">Назад</a>
-                <a style="float: right" class="btn btn-success" href="{% url 'clients:edit' object.pk %}">Редактировать</a>
+                    <p>Номер(а) телефона: </p>
+                    <ul>
+                    {% for number in object.phones.split %}
+                        <li>{{ number }}</li>
+                    {% endfor %}
+                    </ul>
+                    <div style="margin-top: 30vh"></div>
+                    <p>Дата создания: {{ object.createDate|date:"d/m/Y" }} {{ object.createDate|time:"H:i" }}</p>
+                    {% if object.editDate != object.createDate %}
+                        <p>Последнее редактирование: {{ object.editDate|date:"d/m/Y" }} {{ object.editDate|time:"H:i" }}</p>
+                    {% endif %}
+                    <br>
+                    <a class="btn btn-primary" href="{% url 'clients:edit' object.pk %}">Редактировать</a>
+                </div>
             </div>
             <div class="col-sm">
-                BE SOON
+                {% block colum %}
+                    <center>
+                        <h4>Меню</h4>
+                    </center>
+                    <br>
+                    <a class="btn btn-primary btn-block" href="{% url 'projects:view' object.pk %}">Список проектов</a>
+                    <a class="btn btn-primary btn-block" href="">Сообщения</a>
+                {% endblock %}
+
             </div>
         </div>
     </div>
