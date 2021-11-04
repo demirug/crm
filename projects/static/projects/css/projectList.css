@@ -1,0 +1,30 @@
+.project-item {
+    margin: 1rem;
+    border-radius: 5px;
+    background-color: rgb(233, 236, 239);
+    padding: 1em 2rem;
+}
+
+.project-status .active {
+    font-weight: bold;
+    color: green;
+}
+
+
+.project-status .finished {
+    font-weight: bold;
+    color: orange;
+}
+
+.project-item .project-date {
+    float: right;
+}
+
+.project-item a {
+    margin: 0px 5px 5px 0px
+}
+
+.nav-path {
+    margin: 0 1rem;
+    color: #8a8a8a;
+}

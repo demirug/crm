@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', ClientListView.as_view(), name='home'),
     path('clients/', include(('clients.urls', 'clients'))),
+    path('projects/', include(('projects.urls', 'projects'))),
 ]

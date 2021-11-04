@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'projects/css/projectDetail.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <center>
+        <h3>Детали проекта</h3>
+    </center>
+
+    <div class="content-frame">
+        <p>Название проекта: {{ object.name }}</p>
+        <p>Описание проекта:</p>
+        <p style="margin-left: 5px">{{ object.description }}</p>
+        <p>Стоимость проекта: {{ object.price }} грн</p>
+
+        <div class="project-status">
+            {% if object.finished %}
+                <span>Статус: <span class="finished">Finished</span></span>
+                <p>Закрыто: {{ object.finish_date|date:"d/m/Y" }} {{ object.finish_date|time:"H:i" }}</p>
+            {% else %}
+                <p>Статус: <span class="active">Active</span></p>
+            {% endif %}
+        </div>
+
+        <hr>
+        <a href="{% url 'projects:view' object.company.pk %}" class="btn btn-primary">К списку проектов</a>
+    <a href="{% url 'projects:edit' object.pk %}" class="btn btn-primary">Редактировать</a>
+        <p style="float: right">{{ object.start_date|date:"d/m/Y" }} {{ object.start_date|time:"H:i" }}</p>
+    </div>
+
+{% endblock %}
