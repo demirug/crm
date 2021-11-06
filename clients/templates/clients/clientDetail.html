@@ -49,7 +49,7 @@
                     </center>
                     <br>
                     <a class="btn btn-primary btn-block" href="{% url 'projects:view' object.pk %}">Список проектов</a>
-                    <a class="btn btn-primary btn-block" href="">Сообщения</a>
+                    <a class="btn btn-primary btn-block" href="{% url 'communications:company' object.pk %}">Сообщения компании</a>
                 {% endblock %}
 
             </div>
