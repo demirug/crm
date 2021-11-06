@@ -33,6 +33,7 @@
             <p class="project-date"> {{ object.start_date|date:"d/m/Y" }} {{ object.start_date|time:"H:i" }}</p>
             <hr>
             <a href='{{ object.get_absolute_url }}' class="btn btn-primary">Подробнее</a>
+            <a href='{% url 'communications:project' object.pk %}' class="btn btn-primary">Сообщения</a>
             <a href='{% url 'projects:edit' object.pk %}' class="btn btn-primary">Редактировать</a>
         </div>
     {% empty %}
