@@ -62,7 +62,7 @@ class ProjectCreateView(View):
                                              price=request.POST['price']
                                              )
             return redirect(project.get_absolute_url())
-        return render(request, 'projects/projectForm.html', {'form': form, 'createMode': True})
+        return render(request, 'projects/projectForm.html', {'form': form, 'pk': pk, 'createMode': True})
 
 
 class ProjectUpdateView(UpdateView):
