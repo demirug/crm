@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Настройки аккаунта{% endblock %}
+{% block head %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'accounts/css/detail.css' %}">
+    {% block subhead %}{% endblock %}
+{% endblock %}
+{% block content %}
+    <div class="user-content">
+        <center>
+            {% if object.account.photo %}
+            <img src="{{ object.photo.url }}" alt="">
+            {% else %}
+                {% load static %}
+                <img src="{% static 'accounts/images/No-Image.png' %}" alt="">
+            {% endif %}
+            <hr>
+            <p>Login: {{ object.username }}</p>
+            <p>Email: {{ object.email }}</p>
+            <p>First name: {{ object.first_name }}</p>
+            <p>Last name: {{ object.last_name }}</p>
+            <br>
+            <a href="{% url 'home' %}" class="btn btn-primary">На главную</a>
+            <a href="{% url 'accounts:settings' %}" class="btn btn-primary">Настройки</a>
+       </center>
+    </div>
+{% endblock %}

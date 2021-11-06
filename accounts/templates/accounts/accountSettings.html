@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Клиент {{ object.comp_name }}{% endblock %}
+{% block head %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'accounts/css/form.css' %}">
+    {% block subhead %}{% endblock %}
+{% endblock %}
+{% block content %}
+    <div class="form-content">
+        <center>
+            <h5>Настройки аккаунта</h5>
+        </center>
+        <hr>
+        <form method="post"> {% csrf_token %}
+            {{ form.as_p }}
+            <br>
+            <a href="{% url 'accounts:detail' %}" class="btn btn-primary">Назад</a>
+            <button class="btn btn-primary">Сохранить</button>
+            <a href="{% url 'accounts:password' %}" class="btn btn-primary" style="float: right">Изменить пароль</a>
+        </form>
+    </div>
+
+{% endblock %}

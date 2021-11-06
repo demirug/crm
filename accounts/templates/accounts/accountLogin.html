@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Клиент {{ object.comp_name }}{% endblock %}
+{% block head %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'accounts/css/form.css' %}">
+    {% block subhead %}{% endblock %}
+{% endblock %}
+{% block content %}
+    <div class="form-content">
+        <center>
+            <h5>Авторизация</h5>
+        </center>
+        <hr>
+        <form method="post"> {% csrf_token %}
+            {{ form.as_p }}
+            <br>
+            <center><button class="btn btn-primary">Войти</button></center>
+        </form>
+    </div>
+
+{% endblock %}
