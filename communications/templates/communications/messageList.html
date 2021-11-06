@@ -1,0 +1,58 @@
+{% extends 'clients/clientDetail.html' %}
+
+{% block subhead %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'communications/css/message.css' %}">
+{% endblock %}
+
+{% block colum %}
+        <center>
+            {% if ref == 'company' %}
+                <h3>Сообщения компании</h3>
+            {% elif ref == 'project' %}
+                <h3>Сообщения по проекту {{ project.name }}</h3>
+            {% endif %}
+        </center>
+    <br>
+
+
+    <div class="nav-path">
+        {% if ref == 'company' %}
+            <a class="btn btn-success" href="{{ object.get_absolute_url }}">Назад</a>
+        {% elif ref == 'project' %}
+        <a class="btn btn-success" href="{% url 'projects:view' object.pk %}">Назад</a>
+        <a class="btn btn-success" style="float: right" href="{% url 'communications:create' project.pk %}">Создать сообщение</a>
+        {% endif %}
+    </div>
+    <div class="form-container">
+        <center>
+            <h5>Фильтр</h5>
+        </center>
+        <form style="margin-top: 10px" method="get">
+            {{ filter.form }}
+            <br>
+            <center><button class="btn btn-primary btn-sm">Применить фильтр</button></center>
+        </form>
+    </div>
+
+    {% for object in object_list %}
+        <div class="message">
+            <i><h5>{{ object.get_type_display }}</h5></i>
+            <hr>
+             {% if ref == 'company' %}
+                <p>Проект: {{ object.project.name }}</p>
+            {% endif %}
+            <p>Описание: {{ object.description }}</p>
+            <p>Оценка: {{ object.rating }}/10</p>
+            <hr>
+            <p style="float: right">{{ object.date|date:"d/m/Y" }} {{ object.date|time:"H:i" }}</p>
+            <a class="btn btn-primary" href="{% url 'communications:detail' object.pk %}?type={{ ref }}">Подробнее</a>
+        </div>
+
+    {% empty %}
+        <center>
+            <h3>Сообщения не найдены</h3>
+        </center>
+    {% endfor %}
+
+{% endblock %}

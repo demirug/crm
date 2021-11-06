@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'communications/css/message.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <div class="message">
+        <center>
+            {% if createMode %}
+                <h4>Создание сообщения</h4>
+            {% else %}
+                <h4>Редактирование сообщения</h4>
+            {% endif %}
+        </center>
+        <form action="" method="post">{% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-primary" style="float: right">Сохранить</button>
+            {% if createMode %}
+                <a href="{% url 'communications:project' object.pk %}" class="btn btn-primary" >Назад</a>
+            {% else %}
+                <a href="{% url 'communications:detail' object.pk %}" class="btn btn-primary" >Назад</a>
+            {% endif %}
+        </form>
+
+    </div>
+
+{% endblock %}
