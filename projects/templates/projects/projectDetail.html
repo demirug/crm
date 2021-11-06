@@ -28,8 +28,8 @@
         </div>
 
         <hr>
-        <a href="{% url 'projects:view' object.company.pk %}" class="btn btn-primary">К списку проектов</a>
-    <a href="{% url 'projects:edit' object.pk %}" class="btn btn-primary">Редактировать</a>
+        <a href="{% url 'projects:view' object.company.pk %}" class="btn btn-primary">Назад</a>
+        <a href="{% url 'projects:edit' object.pk %}" class="btn btn-primary">Редактировать</a>
         <p style="float: right">{{ object.start_date|date:"d/m/Y" }} {{ object.start_date|time:"H:i" }}</p>
     </div>
 
