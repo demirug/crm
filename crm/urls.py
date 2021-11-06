@@ -23,4 +23,5 @@ urlpatterns = [
     path('', ClientListView.as_view(), name='home'),
     path('clients/', include(('clients.urls', 'clients'))),
     path('projects/', include(('projects.urls', 'projects'))),
+    path('communications/', include(('communications.urls', 'communications'))),
 ]
