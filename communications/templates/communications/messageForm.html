@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% block title %}{% if createMode %}Создание сообщения{% else %}Редактирование сообщения{% endif %}{% endblock %}
 {% block head %}
 
     {% load static %}
