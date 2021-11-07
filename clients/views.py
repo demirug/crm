@@ -1,12 +1,16 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic import ListView, DetailView, UpdateView, CreateView
+from django.shortcuts import render, redirect
+from django.views import View
+from django.views.generic import ListView, DetailView, UpdateView
 
-from clients.forms import ClientForm
+from accounts.mixins import ManagerRequiredMixin
+from clients.forms import ClientForm, ClientModelForm
 from clients.models import Client
 
 
-class ClientListView(ListView):
+class ClientListView(LoginRequiredMixin, ListView):
     model = Client
     template_name = 'clients/clientList.html'
     ordering = ['pk']
@@ -27,14 +31,14 @@ class ClientListView(ListView):
         return qs.order_by(*self.ordering)
 
 
-class ClientDetailView(DetailView):
+class ClientDetailView(LoginRequiredMixin, DetailView):
     model = Client
     template_name = 'clients/clientDetail.html'
 
 
-class ClientUpdateView(SuccessMessageMixin, UpdateView):
+class ClientUpdateView(LoginRequiredMixin, ManagerRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Client
-    form_class = ClientForm
+    form_class = ClientModelForm
     template_name = 'clients/clientForm.html'
     success_message = 'Данные клиента были обновлены'
 
@@ -46,26 +50,28 @@ class ClientUpdateView(SuccessMessageMixin, UpdateView):
         return super().post(request, *args, **kwargs)
 
 
-class ClientCreateView(SuccessMessageMixin, CreateView):
-    model = Client
-    form_class = ClientForm
-    template_name = 'clients/clientForm.html'
-    success_message = 'Карточка клиента была успешно создана'
+class ClientCreateView(LoginRequiredMixin, ManagerRequiredMixin, View):
 
-    def get_context_data(self, **kwargs):
-        """
-            Передана перменная create_mode = True
-            для изменения отображения clientForm.html
-            В зависимости от наличия переменной режим
-            Шаблон работает для создания или редактирования
-        """
-        context = super().get_context_data(**kwargs)
-        context['create_mode'] = True
-        return context
+    def get(self, request):
+        form = ClientForm()
+        return render(request, 'clients/clientForm.html', context={'form': form, 'create_mode': True})
 
-    def post(self, request, *args, **kwargs):
-        """Вывод ошибок формы осуществляется через messages framework"""
-        form: ClientForm = self.get_form()
-        for label in form.errors.as_data():
-            messages.error(request, "{}".format(*form.errors[label].as_data()[0]))
-        return super().post(request, *args, **kwargs)
+    def post(self, request):
+
+        form = ClientForm(request.POST)
+        if form.is_valid():
+            client = Client.objects.create(manager=request.user,
+                                           comp_name=form.cleaned_data['comp_name'],
+                                           comp_description=form.cleaned_data['comp_description'],
+                                           supervisor=form.cleaned_data['supervisor'],
+                                           address=form.cleaned_data['address'],
+                                           phones=form.cleaned_data['phones'],
+                                           emails=form.cleaned_data['emails']
+                                           )
+
+            messages.success(request, "Карточка клиента была успешно создана")
+            return redirect(client.get_absolute_url())
+        else:
+            for label in form.errors.as_data():
+                messages.error(request, "{}".format(*form.errors[label].as_data()[0]))
+            return render(request, 'clients/clientForm.html', context={'form': form, 'create_mode': True})

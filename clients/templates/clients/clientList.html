@@ -6,7 +6,9 @@
 {% endblock %}
 
 {% block content %}
-    <p>Выберите для просмотра карточку<a style="float: right" class="btn btn-success btn-sm" href="{% url 'clients:create' %}">Создать</a></p>
+    {% if request.user.has_manager_perms %}
+        <p>Выберите для просмотра карточку<a style="float: right" class="btn btn-success btn-sm" href="{% url 'clients:create' %}">Создать</a></p>
+    {% endif %}
     {% if object_list %}
         <table class="table">
           <thead class="thead-dark">

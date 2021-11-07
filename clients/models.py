@@ -1,8 +1,11 @@
 from django.db import models
 from django.urls import reverse
 
+from accounts.models import Account
+
 
 class Client(models.Model):
+    manager = models.ForeignKey(Account, null=True, on_delete=models.SET_NULL)
     comp_name = models.CharField(max_length=160)
     comp_description = models.TextField(max_length=300)
     supervisor = models.CharField(max_length=120)

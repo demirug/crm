@@ -19,7 +19,7 @@
                         </div>
 
                     <p>Директор: {{ object.supervisor }}</p>
-                    <p>Адресс: {{ object.address }}</p>
+                    <p>Адрес: {{ object.address }}</p>
                     <p>Email адрес(а): </p>
                     <ul>
                     {% for email in object.emails.split %}
@@ -39,7 +39,9 @@
                         <p>Последнее редактирование: {{ object.editDate|date:"d/m/Y" }} {{ object.editDate|time:"H:i" }}</p>
                     {% endif %}
                     <br>
+                    {% if request.user.has_manager_perms %}
                     <a class="btn btn-primary" href="{% url 'clients:edit' object.pk %}">Редактировать</a>
+                    {% endif %}
                 </div>
             </div>
             <div class="col-sm">
@@ -49,7 +51,9 @@
                     </center>
                     <br>
                     <a class="btn btn-primary btn-block" href="{% url 'projects:view' object.pk %}">Список проектов</a>
-                    <a class="btn btn-primary btn-block" href="{% url 'communications:company' object.pk %}">Сообщения компании</a>
+                    {% if request.user.has_manager_perms %}
+                        <a class="btn btn-primary btn-block" href="{% url 'communications:company' object.pk %}">Сообщения компании</a>
+                    {% endif %}
                 {% endblock %}
 
             </div>

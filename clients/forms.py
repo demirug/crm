@@ -3,7 +3,7 @@ from clients.models import Client
 import re
 
 
-class ClientForm(forms.ModelForm):
+class ClientForm(forms.Form):
     comp_name = forms.CharField(label='Название компании',
                                 error_messages={'required': 'Необходимо ввести название компании'},
                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -41,6 +41,9 @@ class ClientForm(forms.ModelForm):
                 raise forms.ValidationError("Номер телефона {} некорректный".format(number))
         return self.cleaned_data.get('phones')
 
+
+class ClientModelForm(ClientForm, forms.ModelForm):
+
     class Meta:
         model = Client
-        fields = '__all__'
+        exclude = ['manager']
