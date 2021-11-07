@@ -91,7 +91,7 @@ class MessageCreateView(LoginRequiredMixin, ManagerRequiredMixin, View):
                                              description=form.cleaned_data['description'],
                                              rating=form.cleaned_data['rating']
                                              )
-            return redirect(message.get_absolute_url())
+            return redirect(message.get_absolute_url() + '?type=project')
         else:
             """
             createMode передается для настройки шаблона
