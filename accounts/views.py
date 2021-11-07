@@ -26,7 +26,11 @@ class AccountLoginView(View):
         if form.is_valid():
             _login = form.cleaned_data['login']
             _password = form.cleaned_data['password']
+
             user = authenticate(username=_login, password=_password)
+            if not user:
+                messages.error(request, 'Неверный логин или пароль')
+                return render(request, 'accounts/accountLogin.html', context={'form': form})
             login(request, user)
             return redirect(request.GET.get('next') or '/')
         else:
