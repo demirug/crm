@@ -5,6 +5,7 @@ from accounts.models import Account
 
 
 class Client(models.Model):
+    """Форма клиента"""
     manager = models.ForeignKey(Account, null=True, on_delete=models.SET_NULL)
     comp_name = models.CharField(max_length=160)
     comp_description = models.TextField(max_length=300)

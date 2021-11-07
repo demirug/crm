@@ -5,6 +5,11 @@ from .models import Account
 
 
 class AccountAdmin(UserAdmin):
+    """
+    Поля для панели администрации
+    Добавлен раздел Manager Info
+    с полями is_manager, photo
+    """
     list_display = (
         'username', 'email', 'first_name', 'last_name', 'is_staff',
         'is_superuser', 'photo'
@@ -54,6 +59,3 @@ class AccountAdmin(UserAdmin):
 
 
 admin.site.register(Account, AccountAdmin)
-
-# admin.site.unregister(User)
-# admin.site.register(User, CustomUserAdmin)

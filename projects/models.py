@@ -3,7 +3,7 @@ from django.urls import reverse
 
 
 class Project(models.Model):
-
+    """Модель проекта"""
     company = models.ForeignKey('clients.Client', on_delete=models.CASCADE)
     name = models.CharField(max_length=120)
     description = models.TextField()

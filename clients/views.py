@@ -11,6 +11,10 @@ from clients.models import Client
 
 
 class ClientListView(LoginRequiredMixin, ListView):
+    """
+    Выводит список клиентов на главной странице
+    С сортировкой по названию / дате создания карточки
+    """
     model = Client
     template_name = 'clients/clientList.html'
     ordering = ['pk']
@@ -32,11 +36,13 @@ class ClientListView(LoginRequiredMixin, ListView):
 
 
 class ClientDetailView(LoginRequiredMixin, DetailView):
+    """Подробная информация о клиенте"""
     model = Client
     template_name = 'clients/clientDetail.html'
 
 
 class ClientUpdateView(LoginRequiredMixin, ManagerRequiredMixin, SuccessMessageMixin, UpdateView):
+    """Обновление карточки клиента"""
     model = Client
     form_class = ClientModelForm
     template_name = 'clients/clientForm.html'
@@ -51,7 +57,7 @@ class ClientUpdateView(LoginRequiredMixin, ManagerRequiredMixin, SuccessMessageM
 
 
 class ClientCreateView(LoginRequiredMixin, ManagerRequiredMixin, View):
-
+    """Создание карточки клиента"""
     def get(self, request):
         form = ClientForm()
         return render(request, 'clients/clientForm.html', context={'form': form, 'create_mode': True})

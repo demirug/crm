@@ -3,6 +3,11 @@ from django.contrib.auth.models import AbstractUser, User
 
 
 class Account(AbstractUser):
+    """
+    Расширеная версия User-а
+    boolean: is_manager является ли пользователь менеджером
+    image: photo фото аккаунта пользователя
+    """
     is_manager = models.BooleanField(default=False)
     photo = models.ImageField(upload_to='accounts', null=True, blank=True)
 

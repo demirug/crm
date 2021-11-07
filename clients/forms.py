@@ -4,6 +4,7 @@ import re
 
 
 class ClientForm(forms.Form):
+    """Форма для создания клиента"""
     comp_name = forms.CharField(label='Название компании',
                                 error_messages={'required': 'Необходимо ввести название компании'},
                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -43,7 +44,7 @@ class ClientForm(forms.Form):
 
 
 class ClientModelForm(ClientForm, forms.ModelForm):
-
+    """Модельная форма для обновления клиента"""
     class Meta:
         model = Client
         exclude = ['manager']
