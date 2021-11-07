@@ -2,6 +2,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from accounts.models import Account
+
 
 class Message(models.Model):
     """Модель сообщения"""
@@ -15,7 +17,7 @@ class Message(models.Model):
 
     type = models.CharField(max_length=2, choices=MessageChanel.choices)
     project = models.ForeignKey('projects.Project', on_delete=models.CASCADE)
-    manager = models.CharField(max_length=120)
+    manager = models.ForeignKey(Account, null=True, on_delete=models.SET_NULL)
     description = models.TextField()
     rating = models.PositiveSmallIntegerField()
     date = models.DateTimeField(auto_now=True)

@@ -1,7 +1,9 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.views.generic import DetailView, UpdateView
 
+from accounts.mixins import ManagerRequiredMixin
 from clients.models import Client
 from .filters import MessageFilter
 from .forms import MessageCreateForm, MessageUpdateForm
@@ -9,7 +11,7 @@ from .models import Message
 from projects.models import Project
 
 
-class CompanyMessageView(View):
+class CompanyMessageView(LoginRequiredMixin, ManagerRequiredMixin, View):
     """Отображение всех сообщений компании"""
     def get(self, request, pk):
 
@@ -27,7 +29,7 @@ class CompanyMessageView(View):
                       context={'object': object, 'object_list': _filter.qs, 'filter': _filter, 'ref': 'company' })
 
 
-class ProjectMessageView(View):
+class ProjectMessageView(LoginRequiredMixin, ManagerRequiredMixin, View):
     """Отображение всех сообщений проекта"""
     def get(self, request, pk):
         project = get_object_or_404(Project, pk=pk)
@@ -42,13 +44,13 @@ class ProjectMessageView(View):
                       context={'object': project.company, 'project': project, 'object_list': _filter.qs, 'filter': _filter, 'ref': 'project' })
 
 
-class MessageDetailView(DetailView):
+class MessageDetailView(LoginRequiredMixin, ManagerRequiredMixin, DetailView):
     """Детальная информация о сообщении"""
     model = Message
     template_name = 'communications/messageDetail.html'
 
 
-class MessageUpdateView(UpdateView):
+class MessageUpdateView(LoginRequiredMixin, ManagerRequiredMixin, UpdateView):
     """Редактирование сообщения"""
     model = Message
     template_name = 'communications/messageForm.html'
@@ -57,14 +59,13 @@ class MessageUpdateView(UpdateView):
     def post(self, request, *args, **kwargs):
         """Присваивание имени менеджера сообщению"""
         message: Message = self.get_object()
-        # TODO PRINT MANAGER NAME HERE
-        message.manager = "WILL HERE SOON"
+        message.manager = request.user
         message.save()
 
         return super().post(request, *args, **kwargs)
 
 
-class MessageCreateView(View):
+class MessageCreateView(LoginRequiredMixin, ManagerRequiredMixin, View):
     """Создание сообщения"""
     def get(self, request, pk):
         project = get_object_or_404(Project, pk=pk)
@@ -86,7 +87,7 @@ class MessageCreateView(View):
             """
             message = Message.objects.create(type=form.cleaned_data['type'],
                                              project=project,
-                                             manager='WILL BE SOON',  # TODO PRINT MANAGER NAME HERE
+                                             manager=request.user,
                                              description=form.cleaned_data['description'],
                                              rating=form.cleaned_data['rating']
                                              )
