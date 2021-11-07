@@ -32,7 +32,7 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Аккаунт</a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="{% url 'accounts:settings' %}">Настройки</a>
+            <a class="dropdown-item" href="{% url 'accounts:detail' %}">Мой  профиль</a>
             <a class="dropdown-item" href="{% url 'accounts:password' %}">Изменение пароля</a>
             {% if request.user.has_manager_perms %}
                 <a class="dropdown-item" href="{% url 'accounts:clients' %}">Созданные карточки</a>
