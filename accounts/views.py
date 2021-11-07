@@ -5,8 +5,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import render, redirect
 from django.views import View
+from django.views.generic import ListView
 
+from clients.models import Client
 from .forms import AccountUpdateForm, AccountPasswordForm, AccountLoginForm
+from .mixins import ManagerRequiredMixin
 
 
 class AccountLoginView(View):
@@ -53,6 +56,18 @@ class AccountUpdateView(LoginRequiredMixin, View):
             messages.success(request, 'Данные были успешно изменены')
             return redirect('accounts:detail')
         return render(request, 'accounts/accountSettings.html', context={'form': form})
+
+
+class AccountClientListView(LoginRequiredMixin, ManagerRequiredMixin, ListView):
+    """
+    Выводит список клиентов созданых менеджером
+    """
+    model = Client
+    template_name = 'accounts/accountClientList.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Client.objects.filter(manager=self.request.user).order_by('createDate')
 
 
 class AccountPasswordUpdateView(LoginRequiredMixin, View):
