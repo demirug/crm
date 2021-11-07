@@ -28,3 +28,8 @@ urlpatterns = [
     path('communications/', include(('communications.urls', 'communications'))),
     path('account/', include(('accounts.urls', 'accounts'))),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler400 = "crm.views.bad_request_view"
+handler403 = "crm.views.permission_denied_view"
+handler404 = "crm.views.not_found_view"
+handler500 = "crm.views.server_error_view"
