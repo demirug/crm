@@ -10,8 +10,8 @@
         <p>Выберите для просмотра карточку<a style="float: right" class="btn btn-success btn-sm" href="{% url 'clients:create' %}">Создать</a></p>
     {% endif %}
     {% if object_list %}
-        <table class="table">
-          <thead class="thead-dark">
+        <table class="table table-striped table-light">
+          <thead>
             <tr>
             {% if request.GET.order == "comp_name" %}
                 <th scope="col"><a href="?order=-comp_name">Компания</a> {% if 'comp_name' in request.GET.order %}▲{% endif %}</th>

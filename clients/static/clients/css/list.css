@@ -1,7 +1,7 @@
 th>a {
-    color: white;
+    color: black;
 }
 
 th>a:hover {
-    color: darkgray;
+    color: #4a4646;
 }
