@@ -32,7 +32,7 @@ class MessageCreateForm(forms.Form):
             raise ValidationError('Значение оценки должно быть в лимите от 1 до 10')
 
 
-class MessageUpdateForm(MessageCreateForm. forms.ModelForm):
+class MessageUpdateForm(MessageCreateForm, forms.ModelForm):
     """
     Форма для изменения сообщения
     Наследует поля у MessageCreateForm
