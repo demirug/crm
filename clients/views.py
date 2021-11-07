@@ -18,7 +18,6 @@ class ClientListView(LoginRequiredMixin, ListView):
     model = Client
     template_name = 'clients/clientList.html'
     ordering = ['pk']
-    paginate_by = 10
 
     def get_queryset(self):
         """Переопределен get_queryset для сортировки списка по GET параметру order"""
