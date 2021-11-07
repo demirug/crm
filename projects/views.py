@@ -1,7 +1,10 @@
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView
 
+from accounts.mixins import ManagerRequiredMixin
 from clients.models import Client
 from projects.forms import ProjectUpdateForm, ProjectCreateForm
 from projects.models import Project
@@ -9,7 +12,7 @@ from projects.models import Project
 from django.utils.timezone import now
 
 
-class ProjectListView(ListView):
+class ProjectListView(LoginRequiredMixin, ListView):
     """Просмотр всех проектов по выбраной компании"""
     model = Project
     template_name = 'projects/projectList.html'
@@ -30,14 +33,15 @@ class ProjectListView(ListView):
         return context
 
 
-class ProjectDetailView(DetailView):
+class ProjectDetailView(LoginRequiredMixin, ManagerRequiredMixin, DetailView):
     """Просмотр деталей проекта"""
     model = Project
     template_name = 'projects/projectDetail.html'
 
 
-class ProjectCreateView(View):
+class ProjectCreateView(LoginRequiredMixin, ManagerRequiredMixin, View):
     """Создание проекта"""
+
     def get(self, request, pk):
         """
         Рендеринг формы для создания проэкта
@@ -55,17 +59,22 @@ class ProjectCreateView(View):
         """
         form = ProjectCreateForm(request.POST)
         if form.is_valid():
+            """Если проект с этим именем существует выдавать ошибку"""
+            if Project.objects.filter(company__pk=pk, name=form.cleaned_data['name'].strip()).exists():
+                messages.error(request, "Проэкт с таким именем уже существует")
+                return render(request, 'projects/projectForm.html', {'form': form, 'pk': pk, 'createMode': True})
+
             company = get_object_or_404(Client, pk=pk)
             project = Project.objects.create(company=company,
-                                             name=request.POST['name'],
-                                             description=request.POST['description'],
-                                             price=request.POST['price']
+                                             name=form.cleaned_data['name'].strip(),
+                                             description=form.cleaned_data['description'],
+                                             price=form.cleaned_data['price']
                                              )
             return redirect(project.get_absolute_url())
         return render(request, 'projects/projectForm.html', {'form': form, 'pk': pk, 'createMode': True})
 
 
-class ProjectUpdateView(UpdateView):
+class ProjectUpdateView(LoginRequiredMixin, ManagerRequiredMixin, UpdateView):
     """Обновление параметров проекта"""
     model = Project
     form_class = ProjectUpdateForm
@@ -82,12 +91,10 @@ class ProjectUpdateView(UpdateView):
 
         if form.is_valid():
             if 'finished' in form.data:
-                if not project.finished:
-                    project.finish_date = now()
-                    project.save()
+                project.finish_date = now()
+                project.save()
             else:
-                if project.finished:
-                    project.finish_date = None
-                    project.save()
+                project.finish_date = None
+                project.save()
 
         return super().post(request, *args, **kwargs)

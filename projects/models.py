@@ -19,5 +19,6 @@ class Project(models.Model):
         return self.company.comp_name + " / " + self.name
 
     class Meta:
+        unique_together = [['company', 'name']]
         verbose_name = "Проект"
         verbose_name_plural = "Проекты"
