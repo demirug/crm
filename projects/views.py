@@ -17,7 +17,7 @@ class ProjectListView(LoginRequiredMixin, ListView):
     model = Project
     template_name = 'projects/projectList.html'
     paginate_by = 3
-    ordering = ['finish_date', '-start_date']
+    ordering = ['-start_date']
 
     def get_queryset(self):
         """
